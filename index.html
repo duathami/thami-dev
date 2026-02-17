@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Exercício_Logica_Python_v2.py</title>
     <style>
         body {
@@ -12,9 +12,9 @@
             height: 100vh;
             margin: 0;
             background-color: #0e1117; 
-            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-            color: #000000;
+            font-family: 'Inter', sans-serif;
             overflow: hidden;
+            touch-action: manipulation;
         }
 
         #container {
@@ -29,7 +29,7 @@
         }
 
         #loader {
-            font-family: 'Fira Code', 'Courier New', monospace;
+            font-family: monospace;
             color: #444;
             font-size: 13px;
             text-align: left;
@@ -39,60 +39,48 @@
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             margin-bottom: 35px;
             display: none;
-            color: #000000;
-            line-height: 1.3;
+            color: #000;
         }
 
         .buttons {
             display: none;
-            justify-content: space-evenly;
-            align-items: center;
-            width: 100%;
+            justify-content: center;
             gap: 15px;
         }
 
         button {
-            padding: 16px 35px;
+            padding: 16px 30px;
             font-size: 18px;
             font-weight: 800;
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         #btnSim {
             background-color: #28a745;
-            color: #ffffff;
-            flex: 1;
+            color: #fff;
         }
 
         #btnNao {
             background-color: #dc3545;
-            color: #ffffff;
-            flex: 1;
-            z-index: 999;
-            /* Importante para não bugar o clique no celular */
-            touch-action: none; 
+            color: #fff;
+            position: relative;
+            /* Desativa qualquer interação padrão de clique no celular */
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #mensagem {
             display: none;
-            color: #000000;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: #000;
         }
 
-        #mensagem h2 {
-            color: #28a745;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #mensagem h2 { color: #28a745; }
     </style>
 </head>
 <body>
@@ -100,20 +88,20 @@
     <div id="container">
         <div id="loader">
             <p>> python logic_check.py</p>
-            <p>> initializing_interface...</p>
+            <p>> loading_modules...</p>
         </div>
 
         <div id="conteudo-principal">
             <h1 id="pergunta">Tiffani Lustosa, você quer me dar uns beijinhos?</h1>
             <div class="buttons" id="area-botoes">
                 <button id="btnSim" onclick="aceitou()">SIM!</button>
-                <button id="btnNao" onpointerdown="fugir(event)" onclick="event.preventDefault()">Não</button>
+                <button id="btnNao" onpointerdown="fugir()">Não</button>
             </div>
         </div>
         
         <div id="mensagem">
             <h2>Eu já sabia! ❤️</h2>
-            <p style="font-size: 18px; font-weight: 500;">Mal posso esperar para te ver novamente, gatinha!</p>
+            <p>Mal posso esperar para te ver novamente, gatinha!</p>
         </div>
     </div>
 
@@ -122,20 +110,18 @@
             document.getElementById('loader').style.display = 'none';
             document.getElementById('pergunta').style.display = 'block';
             document.getElementById('area-botoes').style.display = 'flex';
-        }, 2200);
+        }, 2000);
 
-        function fugir(event) {
-            // Se for no celular, evita que o clique seja processado como "Sim"
-            if (event) event.preventDefault();
-
+        function fugir() {
             const btnNao = document.getElementById('btnNao');
             
-            const offset = 60;
+            // Impede que o botão seja "clicado" enquanto foge
+            const offset = 80;
             const maxX = window.innerWidth - btnNao.offsetWidth - offset;
             const maxY = window.innerHeight - btnNao.offsetHeight - offset;
 
-            const newX = Math.max(offset, Math.random() * maxX);
-            const newY = Math.max(offset, Math.random() * maxY);
+            const newX = Math.random() * maxX + (offset/2);
+            const newY = Math.random() * maxY + (offset/2);
 
             btnNao.style.position = 'fixed';
             btnNao.style.left = newX + 'px';
@@ -146,6 +132,12 @@
             document.getElementById('conteudo-principal').style.display = 'none';
             document.getElementById('mensagem').style.display = 'block';
         }
+
+        // Bloqueia qualquer clique acidental no botão Não em nível de sistema
+        document.getElementById('btnNao').addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
     </script>
 </body>
 </html>

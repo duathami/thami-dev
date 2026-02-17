@@ -14,18 +14,18 @@
             background-color: #0e1117; 
             font-family: 'Inter', sans-serif;
             overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none; /* Crucial para o botão fugir no celular */
         }
 
         /* POPUP DE AVISO */
         #overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 9999;
         }
 
         #popup {
@@ -41,11 +41,10 @@
         #btnOk {
             margin-top: 20px;
             padding: 12px 25px;
-            background-color: #ced4da; /* Desativado inicialmente */
+            background-color: #ced4da;
             color: #fff;
             border: none;
             border-radius: 10px;
-            cursor: not-allowed;
             font-weight: bold;
         }
 
@@ -62,7 +61,7 @@
             box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             width: 90%;
             max-width: 400px;
-            text-align: left; /* Alinhamento para a lista */
+            text-align: left;
             z-index: 10;
         }
 
@@ -71,7 +70,7 @@
         ul { list-style: none; padding: 0; margin-bottom: 30px; }
         ul li { 
             margin-bottom: 12px; 
-            font-size: 16px; 
+            font-size: 15px; 
             color: #333; 
             display: flex;
             align-items: center;
@@ -83,6 +82,7 @@
             justify-content: center;
             gap: 15px;
             margin-top: 20px;
+            position: relative;
         }
 
         button {
@@ -91,13 +91,16 @@
             font-weight: 800;
             border: none;
             border-radius: 15px;
-            cursor: pointer;
         }
 
-        #btnSim { background-color: #28a745; color: #fff; }
+        #btnSim { background-color: #28a745; color: #fff; cursor: pointer; }
+        
         #btnNao { 
-            background-color: #dc3545; color: #fff; 
-            position: relative; touch-action: none;
+            background-color: #dc3545; 
+            color: #fff; 
+            position: relative; 
+            z-index: 999;
+            touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -111,7 +114,7 @@
         <div id="popup">
             <h3 style="color: #000;">⚠️ AVISO DE SIGILO</h3>
             <p style="color: #444; font-size: 14px; line-height: 1.5;">
-                Este site foi projetado para oferecer experiências incríveis à usuária. Toda e qualquer informação contida aqui é altamente sigilosa e de uso exclusivo entre as partes.
+                Este site foi projetado para oferecer experiências incríveis à usuária. Toda e qualquer informação contida aqui é altamente sigilosa.
             </p>
             <p id="timer" style="font-size: 12px; color: #dc3545; font-weight: bold;">
                 Botão disponível em <span id="segundos">10</span>s...
@@ -122,12 +125,13 @@
 
     <div id="container">
         <div id="conteudo-principal">
-            <h1>Tiffani Lustosa, você está de acordo em sair com Thamires Duarte para dar uns beijinhos?</h1>
+            <h1>Tiffani Lustosa, você está de acordo em sair com Thamires Duarte para um segundo date?</h1>
             
-            <p style="font-weight: bold; font-size: 14px; color: #666; margin-bottom: 10px;">A EXPERIÊNCIA INCLUI:</p>
+            <p style="font-weight: bold; font-size: 13px; color: #666; margin-bottom: 10px;">A EXPERIÊNCIA INCLUI:</p>
             <ul>
                 <li>Abraços gostosos</li>
                 <li>Beijos duvidosos</li>
+                <li>Beijinhos por toda parte</li>
                 <li>Um fininho com piteira de coração</li>
                 <li>Vinho seco</li>
                 <li>Muitas risadas (agende seu botox)</li>
@@ -137,60 +141,64 @@
 
             <div class="buttons">
                 <button id="btnSim" onclick="aceitou()">SIM!</button>
-                <button id="btnNao" onpointerdown="fugir()">Não</button>
+                <button id="btnNao" 
+                        onmouseover="fugir(this)" 
+                        ontouchstart="fugir(this)" 
+                        onclick="evitarClique(event)">Não</button>
             </div>
         </div>
         
         <div id="mensagem">
             <h2>Perfeito, gatinha! 💙</h2>
             <p style="font-size: 18px; color: #333; font-weight: 500;">
-                Agendaremos o melhor dia. O local? Você já sabe... Mal posso esperar! 😻
+                Sabia que você não ia resistir! 💙 nos vemos no nosso próximo melhor momento. 
             </p>
         </div>
     </div>
 
     <script>
-        // Lógica do Timer
+        // Timer do Popup
         let tempo = 10;
         const intervalo = setInterval(() => {
             tempo--;
-            document.getElementById('segundos').innerText = tempo;
+            if(document.getElementById('segundos')) document.getElementById('segundos').innerText = tempo;
             if (tempo <= 0) {
                 clearInterval(intervalo);
                 const btn = document.getElementById('btnOk');
                 btn.classList.add('ativo');
-                btn.style.cursor = 'pointer';
                 document.getElementById('timer').style.display = 'none';
             }
         }, 1000);
 
         function fecharPopup() {
-            if (tempo <= 0) {
-                document.getElementById('overlay').style.display = 'none';
-            }
+            if (tempo <= 0) document.getElementById('overlay').style.display = 'none';
         }
 
-        function fugir() {
-            const btnNao = document.getElementById('btnNao');
-            const offset = 80;
-            const maxX = window.innerWidth - btnNao.offsetWidth - offset;
-            const maxY = window.innerHeight - btnNao.offsetHeight - offset;
-            const newX = Math.random() * maxX + (offset/2);
-            const newY = Math.random() * maxY + (offset/2);
-            btnNao.style.position = 'fixed';
-            btnNao.style.left = newX + 'px';
-            btnNao.style.top = newY + 'px';
+        // FUNÇÃO DE FUGA MELHORADA
+        function fugir(botao) {
+            const margem = 50;
+            const larguraBotao = botao.offsetWidth;
+            const alturaBotao = botao.offsetHeight;
+
+            const novaX = Math.random() * (window.innerWidth - larguraBotao - margem * 2) + margem;
+            const novaY = Math.random() * (window.innerHeight - alturaBotao - margem * 2) + margem;
+
+            botao.style.position = "fixed";
+            botao.style.left = novaX + "px";
+            botao.style.top = novaY + "px";
+        }
+
+        function evitarClique(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            fugir(e.target); // Se ela conseguir clicar, ele foge antes de fazer qualquer coisa
+            return false;
         }
 
         function aceitou() {
             document.getElementById('conteudo-principal').style.display = 'none';
             document.getElementById('mensagem').style.display = 'block';
         }
-
-        document.getElementById('btnNao').addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        });
     </script>
 </body>
 </html>

@@ -11,80 +11,86 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f8f9fa; /* Cinza claro profissional */
-            font-family: 'Courier New', Courier, monospace; /* Fonte de código */
-            text-align: center;
+            background-color: #0e1117; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #1a1a1a;
             overflow: hidden;
         }
 
         #container {
-            background: white;
+            background: #ffffff;
             padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-top: 5px solid #3776ab; /* Azul do Python */
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            z-index: 10;
         }
 
-        /* Tela de Loading inicial para disfarçar */
         #loader {
+            font-family: 'Courier New', monospace;
             color: #333;
+            font-size: 14px;
+            text-align: left;
+            margin-bottom: 20px;
         }
 
         h1 {
-            color: #d63384;
-            font-family: 'Segoe UI', sans-serif;
             font-size: 24px;
+            font-weight: 800;
             margin-bottom: 30px;
             display: none;
         }
 
         .buttons {
             display: none;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
         }
 
         button {
-            padding: 12px 25px;
+            padding: 15px 30px;
             font-size: 18px;
+            font-weight: bold;
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            font-family: 'Segoe UI', sans-serif;
+            min-width: 100px;
         }
 
+        /* Cores solicitadas */
         #btnSim {
-            background-color: #d63384;
+            background-color: #28a745; /* VERDE */
             color: white;
         }
 
         #btnNao {
-            background-color: #ced4da;
-            color: #495057;
+            background-color: #dc3545; /* VERMELHO */
+            color: white;
+            transition: all 0.1s ease;
+            z-index: 999;
         }
 
         #mensagem {
             display: none;
-            font-family: 'Segoe UI', sans-serif;
-            font-size: 20px;
-            color: #d63384;
-            animation: fade 1.5s ease-in;
+            animation: fadeIn 1s;
         }
 
-        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div id="container">
         <div id="loader">
-            <p>> executando exercicio_logica.py...</p>
-            <p>> compilando bibliotecas...</p>
+            <p>> python logic_check.py</p>
+            <p>> loading assets...</p>
         </div>
 
         <div id="conteudo-principal">
-            <h1 id="pergunta">Tiffani, você quer ficar comigo?</h1>
+            <h1 id="pergunta">Tiffani Lustosa, você quer me dar uns beijinhos?</h1>
             <div class="buttons" id="area-botoes">
                 <button id="btnSim" onclick="aceitou()">SIM!</button>
                 <button id="btnNao" onmouseover="fugir()" onclick="fugir()">Não</button>
@@ -92,26 +98,33 @@
         </div>
         
         <div id="mensagem">
-            <p>Eu já sabia! ❤️</p>
-            <p>Mal posso esperar para te dar uns beijinhos</p>
+            <h2 style="color: #28a745;">Eu já sabia hahaha! ❤️</h2>
+            <p>Mal posso esperar para te ver novamente, gatinha!</p>
         </div>
     </div>
 
     <script>
-        // Simula um carregamento de código por 2 segundos antes de mostrar a pergunta
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
             document.getElementById('pergunta').style.display = 'block';
             document.getElementById('area-botoes').style.display = 'flex';
-        }, 2500);
+        }, 2000);
 
         function fugir() {
             const btnNao = document.getElementById('btnNao');
-            const x = Math.random() * (window.innerWidth - btnNao.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btnNao.offsetHeight);
-            btnNao.style.position = 'absolute';
-            btnNao.style.left = x + 'px';
-            btnNao.style.top = y + 'px';
+            
+            // Define limites para o botão não sair da área visível da tela
+            const pad = 50;
+            const maxX = window.innerWidth - btnNao.offsetWidth - pad;
+            const maxY = window.innerHeight - btnNao.offsetHeight - pad;
+
+            // Gera posições aleatórias
+            const newX = Math.random() * maxX;
+            const newY = Math.random() * maxY;
+
+            btnNao.style.position = 'fixed';
+            btnNao.style.left = newX + 'px';
+            btnNao.style.top = newY + 'px';
         }
 
         function aceitou() {

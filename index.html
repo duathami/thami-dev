@@ -14,7 +14,7 @@
             background-color: #0e1117; 
             font-family: 'Inter', sans-serif;
             overflow: hidden;
-            touch-action: none; 
+            touch-action: manipulation;
         }
 
         #overlay {
@@ -37,7 +37,7 @@
             border-top: 5px solid #dc3545;
         }
 
-        #btnOk {
+        #btnOkPopup {
             margin-top: 20px;
             padding: 12px 25px;
             background-color: #ced4da;
@@ -47,7 +47,7 @@
             font-weight: bold;
         }
 
-        #btnOk.ativo {
+        #btnOkPopup.ativo {
             background-color: #28a745;
             cursor: pointer;
         }
@@ -88,18 +88,11 @@
             font-weight: 800;
             border: none;
             border-radius: 15px;
+            cursor: pointer;
         }
 
-        #btnSim { background-color: #28a745; color: #fff; cursor: pointer; }
-        
-        #btnNao { 
-            background-color: #dc3545; 
-            color: #fff; 
-            position: relative; 
-            z-index: 9999; /* Aumentei o z-index */
-            touch-action: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+        #btnSim { background-color: #28a745; color: #fff; }
+        #btnNao { background-color: #dc3545; color: #fff; }
 
         #mensagem { display: none; text-align: center; }
         #mensagem h2 { color: #0056b3; font-size: 26px; }
@@ -116,7 +109,7 @@
             <p id="timer" style="font-size: 12px; color: #dc3545; font-weight: bold;">
                 Botão disponível em <span id="segundos">10</span>s...
             </p>
-            <button id="btnOk" onclick="fecharPopup()">ENTENDI</button>
+            <button id="btnOkPopup" onclick="fecharPopup()">ENTENDI</button>
         </div>
     </div>
 
@@ -138,9 +131,7 @@
 
             <div class="buttons">
                 <button id="btnSim" onclick="aceitou()">SIM!</button>
-                <button id="btnNao" 
-                        onpointerdown="fugir(this, event)" 
-                        onclick="evitarClique(event)">Não</button>
+                <button id="btnNao" onclick="perguntaDeNovo()">Não</button>
             </div>
         </div>
         
@@ -153,13 +144,14 @@
     </div>
 
     <script>
+        // Lógica do Popup Inicial
         let tempo = 10;
         const intervalo = setInterval(() => {
             tempo--;
             if(document.getElementById('segundos')) document.getElementById('segundos').innerText = tempo;
             if (tempo <= 0) {
                 clearInterval(intervalo);
-                const btn = document.getElementById('btnOk');
+                const btn = document.getElementById('btnOkPopup');
                 btn.classList.add('ativo');
                 document.getElementById('timer').style.display = 'none';
             }
@@ -169,33 +161,18 @@
             if (tempo <= 0) document.getElementById('overlay').style.display = 'none';
         }
 
-        // FUGA AGRESSIVA
-        function fugir(botao, evento) {
-            if(evento) {
-                evento.preventDefault();
-                evento.stopPropagation();
-            }
+        // A OPÇÃO 3: O ENGANADOR
+        function perguntaDeNovo() {
+            // Exibe um alerta do próprio navegador (aquele cinza padrão)
+            const resposta = confirm("Ops! O sistema detectou um clique por erro.\n\nVocê quis dizer: SIM?");
             
-            const margem = 80;
-            const larguraBotao = botao.offsetWidth;
-            const alturaBotao = botao.offsetHeight;
-
-            // Calcula limites reais da tela do celular
-            const maxX = window.innerWidth - larguraBotao - margem;
-            const maxY = window.innerHeight - alturaBotao - margem;
-
-            const novaX = Math.max(margem, Math.random() * maxX);
-            const novaY = Math.max(margem, Math.random() * maxY);
-
-            botao.style.position = "fixed";
-            botao.style.left = novaX + "px";
-            botao.style.top = novaY + "px";
-        }
-
-        function evitarClique(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+            if (resposta) {
+                // Se ela clicar em OK no alerta, o site aceita
+                aceitou();
+            } else {
+                // Se ela clicar em CANCELAR, o site avisa que não tem jeito kkk
+                alert("Desculpe, a opção 'Não' está em manutenção no momento.\nPor favor, tente a opção disponível (SIM).");
+            }
         }
 
         function aceitou() {

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercício_Logica_Python_v2.py</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f8f9fa; /* Cinza claro profissional */
+            font-family: 'Courier New', Courier, monospace; /* Fonte de código */
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #container {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-top: 5px solid #3776ab; /* Azul do Python */
+        }
+
+        /* Tela de Loading inicial para disfarçar */
+        #loader {
+            color: #333;
+        }
+
+        h1 {
+            color: #d63384;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 24px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .buttons {
+            display: none;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #btnSim {
+            background-color: #d63384;
+            color: white;
+        }
+
+        #btnNao {
+            background-color: #ced4da;
+            color: #495057;
+        }
+
+        #mensagem {
+            display: none;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 20px;
+            color: #d63384;
+            animation: fade 1.5s ease-in;
+        }
+
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="loader">
+            <p>> executando exercicio_logica.py...</p>
+            <p>> compilando bibliotecas...</p>
+        </div>
+
+        <div id="conteudo-principal">
+            <h1 id="pergunta">Tiffani, você quer ficar comigo?</h1>
+            <div class="buttons" id="area-botoes">
+                <button id="btnSim" onclick="aceitou()">SIM!</button>
+                <button id="btnNao" onmouseover="fugir()" onclick="fugir()">Não</button>
+            </div>
+        </div>
+        
+        <div id="mensagem">
+            <p>Eu já sabia! ❤️</p>
+            <p>Mal posso esperar para te dar uns beijinhos</p>
+        </div>
+    </div>
+
+    <script>
+        // Simula um carregamento de código por 2 segundos antes de mostrar a pergunta
+        setTimeout(() => {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('pergunta').style.display = 'block';
+            document.getElementById('area-botoes').style.display = 'flex';
+        }, 2500);
+
+        function fugir() {
+            const btnNao = document.getElementById('btnNao');
+            const x = Math.random() * (window.innerWidth - btnNao.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btnNao.offsetHeight);
+            btnNao.style.position = 'absolute';
+            btnNao.style.left = x + 'px';
+            btnNao.style.top = y + 'px';
+        }
+
+        function aceitou() {
+            document.getElementById('conteudo-principal').style.display = 'none';
+            document.getElementById('mensagem').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

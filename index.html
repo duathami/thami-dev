@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Exercício_Logica_Python_v2.py</title>
+    <title>Acesso_Restrito_v2.py</title>
     <style>
         body {
             display: flex;
@@ -17,39 +17,72 @@
             touch-action: manipulation;
         }
 
+        /* POPUP DE AVISO */
+        #overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #popup {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            width: 85%;
+            max-width: 350px;
+            text-align: center;
+            border-top: 5px solid #dc3545;
+        }
+
+        #btnOk {
+            margin-top: 20px;
+            padding: 12px 25px;
+            background-color: #ced4da; /* Desativado inicialmente */
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: not-allowed;
+            font-weight: bold;
+        }
+
+        #btnOk.ativo {
+            background-color: #28a745;
+            cursor: pointer;
+        }
+
+        /* CONTEÚDO PRINCIPAL */
         #container {
             background: #ffffff;
-            padding: 40px 30px;
+            padding: 35px 25px;
             border-radius: 28px;
             box-shadow: 0 25px 60px rgba(0,0,0,0.6);
-            width: 85%;
-            max-width: 380px;
-            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            text-align: left; /* Alinhamento para a lista */
             z-index: 10;
         }
 
-        #loader {
-            font-family: monospace;
-            color: #444;
-            font-size: 13px;
-            text-align: left;
-            margin-bottom: 25px;
-            border-left: 3px solid #28a745;
-            padding-left: 10px;
+        h1 { font-size: 20px; font-weight: 800; color: #000; margin-bottom: 20px; text-align: center; }
+        
+        ul { list-style: none; padding: 0; margin-bottom: 30px; }
+        ul li { 
+            margin-bottom: 12px; 
+            font-size: 16px; 
+            color: #333; 
+            display: flex;
+            align-items: center;
         }
-
-        h1 {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 35px;
-            display: none;
-            color: #000;
-        }
+        ul li::before { content: "•"; color: #28a745; font-weight: bold; width: 20px; }
 
         .buttons {
-            display: none;
+            display: flex;
             justify-content: center;
             gap: 15px;
+            margin-top: 20px;
         }
 
         button {
@@ -61,68 +94,89 @@
             cursor: pointer;
         }
 
-        #btnSim {
-            background-color: #28a745;
-            color: #fff;
-        }
-
-        #btnNao {
-            background-color: #dc3545;
-            color: #fff;
-            position: relative;
-            /* Desativa qualquer interação padrão de clique no celular */
-            touch-action: none;
+        #btnSim { background-color: #28a745; color: #fff; }
+        #btnNao { 
+            background-color: #dc3545; color: #fff; 
+            position: relative; touch-action: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        #mensagem {
-            display: none;
-            color: #000;
-        }
-
-        #mensagem h2 { color: #28a745; }
+        #mensagem { display: none; text-align: center; }
+        #mensagem h2 { color: #0056b3; font-size: 26px; }
     </style>
 </head>
 <body>
 
-    <div id="container">
-        <div id="loader">
-            <p>> python logic_check.py</p>
-            <p>> loading_modules...</p>
+    <div id="overlay">
+        <div id="popup">
+            <h3 style="color: #000;">⚠️ AVISO DE SIGILO</h3>
+            <p style="color: #444; font-size: 14px; line-height: 1.5;">
+                Este site foi projetado para oferecer experiências incríveis à usuária. Toda e qualquer informação contida aqui é altamente sigilosa e de uso exclusivo entre as partes.
+            </p>
+            <p id="timer" style="font-size: 12px; color: #dc3545; font-weight: bold;">
+                Botão disponível em <span id="segundos">10</span>s...
+            </p>
+            <button id="btnOk" onclick="fecharPopup()">ENTENDI</button>
         </div>
+    </div>
 
+    <div id="container">
         <div id="conteudo-principal">
-            <h1 id="pergunta">Tiffani Lustosa, você quer me dar uns beijinhos?</h1>
-            <div class="buttons" id="area-botoes">
+            <h1>Tiffani Lustosa, você está de acordo em sair com Thamires Duarte para dar uns beijinhos?</h1>
+            
+            <p style="font-weight: bold; font-size: 14px; color: #666; margin-bottom: 10px;">A EXPERIÊNCIA INCLUI:</p>
+            <ul>
+                <li>Abraços gostosos</li>
+                <li>Beijos duvidosos</li>
+                <li>Um fininho com piteira de coração</li>
+                <li>Vinho seco</li>
+                <li>Muitas risadas (agende seu botox)</li>
+                <li>Carinho de sobra</li>
+                <li>Olhares açucarados</li>
+            </ul>
+
+            <div class="buttons">
                 <button id="btnSim" onclick="aceitou()">SIM!</button>
                 <button id="btnNao" onpointerdown="fugir()">Não</button>
             </div>
         </div>
         
         <div id="mensagem">
-            <h2>Eu já sabia hahaha 💙</h2>
-            <p>Mal posso esperar para te ver novamente, gatinha! 😻</p>
+            <h2>Perfeito, gatinha! 💙</h2>
+            <p style="font-size: 18px; color: #333; font-weight: 500;">
+                Agendaremos o melhor dia. O local? Você já sabe... Mal posso esperar! 😻
+            </p>
         </div>
     </div>
 
     <script>
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('pergunta').style.display = 'block';
-            document.getElementById('area-botoes').style.display = 'flex';
-        }, 2000);
+        // Lógica do Timer
+        let tempo = 10;
+        const intervalo = setInterval(() => {
+            tempo--;
+            document.getElementById('segundos').innerText = tempo;
+            if (tempo <= 0) {
+                clearInterval(intervalo);
+                const btn = document.getElementById('btnOk');
+                btn.classList.add('ativo');
+                btn.style.cursor = 'pointer';
+                document.getElementById('timer').style.display = 'none';
+            }
+        }, 1000);
+
+        function fecharPopup() {
+            if (tempo <= 0) {
+                document.getElementById('overlay').style.display = 'none';
+            }
+        }
 
         function fugir() {
             const btnNao = document.getElementById('btnNao');
-            
-            // Impede que o botão seja "clicado" enquanto foge
             const offset = 80;
             const maxX = window.innerWidth - btnNao.offsetWidth - offset;
             const maxY = window.innerHeight - btnNao.offsetHeight - offset;
-
             const newX = Math.random() * maxX + (offset/2);
             const newY = Math.random() * maxY + (offset/2);
-
             btnNao.style.position = 'fixed';
             btnNao.style.left = newX + 'px';
             btnNao.style.top = newY + 'px';
@@ -133,7 +187,6 @@
             document.getElementById('mensagem').style.display = 'block';
         }
 
-        // Bloqueia qualquer clique acidental no botão Não em nível de sistema
         document.getElementById('btnNao').addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exercício_Logica_Python_v2.py</title>
     <style>
+        /* Fundo escuro para destacar o card branco */
         body {
             display: flex;
             justify-content: center;
@@ -12,73 +13,88 @@
             height: 100vh;
             margin: 0;
             background-color: #0e1117; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #1a1a1a;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+            color: #000000; /* Texto geral em preto */
             overflow: hidden;
         }
 
         #container {
             background: #ffffff;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            padding: 40px 30px;
+            border-radius: 28px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6);
             width: 85%;
-            max-width: 350px;
+            max-width: 380px;
             text-align: center;
             z-index: 10;
         }
 
+        /* Disfarce de terminal mais limpo */
         #loader {
-            font-family: 'Courier New', monospace;
-            color: #333;
-            font-size: 14px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #444;
+            font-size: 13px;
             text-align: left;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            border-left: 3px solid #28a745;
+            padding-left: 10px;
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: 800;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             display: none;
+            color: #000000; /* Título em preto absoluto */
+            line-height: 1.3;
         }
 
         .buttons {
             display: none;
-            justify-content: space-around;
+            justify-content: space-evenly;
             align-items: center;
             width: 100%;
+            gap: 15px;
         }
 
         button {
-            padding: 15px 30px;
+            padding: 16px 35px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 800;
             border: none;
-            border-radius: 12px;
+            border-radius: 15px;
             cursor: pointer;
-            min-width: 100px;
+            transition: transform 0.1s active;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        /* Cores solicitadas */
+        /* Cores Verde e Vermelho solicitadas */
         #btnSim {
             background-color: #28a745; /* VERDE */
-            color: white;
+            color: #ffffff;
+            flex: 1;
         }
 
         #btnNao {
             background-color: #dc3545; /* VERMELHO */
-            color: white;
-            transition: all 0.1s ease;
+            color: #ffffff;
+            flex: 1;
             z-index: 999;
         }
 
         #mensagem {
             display: none;
-            animation: fadeIn 1s;
+            color: #000000;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        #mensagem h2 {
+            color: #28a745; /* Título do sucesso em verde */
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
@@ -86,7 +102,7 @@
     <div id="container">
         <div id="loader">
             <p>> python logic_check.py</p>
-            <p>> loading assets...</p>
+            <p>> initializing_interface...</p>
         </div>
 
         <div id="conteudo-principal">
@@ -98,29 +114,30 @@
         </div>
         
         <div id="mensagem">
-            <h2 style="color: #28a745;">Eu já sabia hahaha! ❤️</h2>
-            <p>Mal posso esperar para te ver novamente, gatinha!</p>
+            <h2>Eu já sabia! ❤️</h2>
+            <p style="font-size: 18px; font-weight: 500;">Mal posso esperar para te ver novamente, gatinha!</p>
         </div>
     </div>
 
     <script>
+        // Carregamento para disfarce
         setTimeout(() => {
             document.getElementById('loader').style.display = 'none';
             document.getElementById('pergunta').style.display = 'block';
             document.getElementById('area-botoes').style.display = 'flex';
-        }, 2000);
+        }, 2200);
 
         function fugir() {
             const btnNao = document.getElementById('btnNao');
             
-            // Define limites para o botão não sair da área visível da tela
-            const pad = 50;
-            const maxX = window.innerWidth - btnNao.offsetWidth - pad;
-            const maxY = window.innerHeight - btnNao.offsetHeight - pad;
+            // Margem para garantir que o botão não encoste nas bordas
+            const offset = 60;
+            const maxX = window.innerWidth - btnNao.offsetWidth - offset;
+            const maxY = window.innerHeight - btnNao.offsetHeight - offset;
 
-            // Gera posições aleatórias
-            const newX = Math.random() * maxX;
-            const newY = Math.random() * maxY;
+            // Gera novas coordenadas aleatórias dentro da área visível
+            const newX = Math.max(offset, Math.random() * maxX);
+            const newY = Math.max(offset, Math.random() * maxY);
 
             btnNao.style.position = 'fixed';
             btnNao.style.left = newX + 'px';
